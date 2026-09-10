@@ -1,40 +1,37 @@
-# d-bot
+# Discord Greeting Bot
 
-Bot sencillo de Discord con discord.js 14. Cuando recibe el mensaje exacto `Hola`, responde con un saludo al autor.
+A minimal **Node.js bot using discord.js 14**. It listens for the exact message `Hola` and replies with `Hola <username>` in the same conversation.
 
-## Estructura
+## Setup
 
-- [index.js](index.js)
-
-## Preparación y uso
-
-Configura `DISCORD_CLIENT_TOKEN` en un `.env` local. Habilita el intent Message Content para el bot en Discord, invítalo a un servidor de pruebas y dale acceso al canal. Al ejecutar el programa, enviar `Hola` debe producir un saludo.
-
-### Raíz del repositorio
-
-Requiere Node.js. Este paquete no fija una versión del runtime; valida compatibilidad con las dependencias antes de actualizarlo.
+Use Node.js and npm compatible with the checked-in discord.js dependency. From the repository root:
 
 ```sh
 npm ci
-npm run start
 ```
 
-Comandos declarados en [package.json](package.json):
+Create a local `.env` containing your own bot token:
 
-| Comando | Acción |
-| --- | --- |
-| `npm run start` | `node index.js` |
+```dotenv
+DISCORD_CLIENT_TOKEN=your_bot_token_here
+```
 
-## Configuración detectada en el código
+`dotenv` loads this file from the working directory. Keep the token private and run the command from the repository root.
 
-Estas son referencias explícitas a variables de entorno, no una garantía de que toda la configuración esté externalizada. Los nombres y archivos permiten localizar dónde se usan; los valores deben corresponder a tu entorno.
+Configure the application as a bot in Discord, enable its Message Content intent, and authorize it for a test server with access to view the channel and send messages. The source requests `Guilds`, `GuildMessages`, and `MessageContent` intents.
 
-| Variable | Referencia |
-| --- | --- |
-| `DISCORD_CLIENT_TOKEN` | [index.js](index.js) |
+## Run and try the greeting
 
-No guardes credenciales reales en la documentación. Si hay `.env.example`, úsalo como referencia y revisa cómo carga la configuración el punto de entrada.
+```sh
+npm start
+```
 
-## Validación y estado
+After login, the console reports the bot's username. Send `Hola` in an accessible server channel to exercise the greeting. Matching is case-sensitive and exact: `hola` or `Hola!` will not trigger this handler. Stop the process with `Ctrl+C`.
 
-Esta guía se contrastó con el árbol de archivos y los manifiestos del repositorio. No se ha validado una ejecución completa contra servicios externos, bases de datos o hardware. Las versiones y los scripts mostrados describen el código actual; no implican que sus dependencias antiguas sigan siendo compatibles.
+Running the bot connects to Discord and can send real replies; there is no dry-run mode.
+
+## Customize and troubleshoot
+
+The complete implementation is in [index.js](index.js). Edit the `messageCreate` condition and reply text to change the greeting. If no reply arrives, check the token, channel permissions, configured intent, and exact message text.
+
+There are no slash commands, database, or web server. The handler does not explicitly ignore messages from other bots, and there is no automated test suite. `node --check index.js` checks syntax without logging in. This documentation update did not connect a bot account or send messages.
